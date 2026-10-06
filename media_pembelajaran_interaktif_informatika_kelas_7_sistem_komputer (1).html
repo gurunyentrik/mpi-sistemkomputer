@@ -1,0 +1,1676 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Media Pembelajaran Interaktif - Sistem Komputer Kelas 7</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome 6.5.1 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Google Fonts Inter & Outfit -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        display: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eef2ff',
+                            100: '#e0e7ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            800: '#3730a3',
+                            900: '#312e81',
+                        },
+                        cyber: {
+                            cyan: '#06b6d4',
+                            emerald: '#10b981',
+                            purple: '#a855f7',
+                            pink: '#ec4899',
+                            amber: '#f59e0b'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s infinite ease-in-out',
+                        'float': 'float 4s ease-in-out infinite',
+                        'sparkle': 'sparkle 1.5s infinite ease-in-out',
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 15px rgba(99, 102, 241, 0.4)' },
+                            '50%': { boxShadow: '0 0 30px rgba(99, 102, 241, 0.8)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        },
+                        sparkle: {
+                            '0%, 100%': { opacity: '0.3', transform: 'scale(0.8)' },
+                            '50%': { opacity: '1', transform: 'scale(1.2)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .mesh-bg {
+            background-color: #0f172a;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.25) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(168, 85, 247, 0.2) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.2) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(236, 72, 153, 0.15) 0px, transparent 50%);
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.5);
+            border-radius: 999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 999px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+        .card-glow-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .card-glow-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 25px -5px rgba(99, 102, 241, 0.15), 0 8px 10px -6px rgba(99, 102, 241, 0.1);
+        }
+        @media print {
+            header, footer, .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-full {
+                width: 100% !important;
+                max-width: none !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 font-sans text-slate-100 antialiased min-h-screen flex flex-col mesh-bg relative selection:bg-brand-500 selection:text-white">
+
+    <!-- Canvas Confetti Overlay -->
+    <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50"></canvas>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-slate-900/80 backdrop-blur-xl border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Brand -->
+                <div class="flex items-center space-x-3 cursor-pointer group" onclick="switchTab('home')">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-brand-600 via-cyber-purple to-cyber-cyan p-0.5 shadow-lg group-hover:scale-105 transition-transform">
+                        <div class="w-full h-full bg-slate-900 rounded-[14px] flex items-center justify-center text-cyber-cyan text-xl font-bold">
+                            <i class="fa-solid fa-cpu text-transparent bg-clip-text bg-gradient-to-r from-cyber-cyan to-brand-500"></i>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center space-x-2">
+                            <h1 class="font-display font-black text-xl tracking-wide bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                                INFORMATIKA<span class="text-cyber-cyan">.EDU</span>
+                            </h1>
+                            <span class="bg-brand-500/20 text-brand-300 text-[10px] font-extrabold px-2 py-0.5 rounded-full border border-brand-500/30 uppercase tracking-widest">Fase D</span>
+                        </div>
+                        <p class="text-xs text-slate-400 font-medium">Sistem Komputer Kelas 7 SMP/MTs</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Navigation Buttons -->
+                <nav class="hidden lg:flex items-center bg-slate-800/60 p-1.5 rounded-2xl border border-slate-700/60 shadow-inner">
+                    <button onclick="switchTab('home')" id="nav-home" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2 active">
+                        <i class="fa-solid fa-house text-cyber-cyan"></i><span>Home</span>
+                    </button>
+                    <button onclick="switchTab('petunjuk')" id="nav-petunjuk" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2">
+                        <i class="fa-solid fa-compass text-cyber-purple"></i><span>Petunjuk</span>
+                    </button>
+                    <button onclick="switchTab('tujuan')" id="nav-tujuan" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2">
+                        <i class="fa-solid fa-bullseye text-cyber-pink"></i><span>Tujuan</span>
+                    </button>
+                    <button onclick="switchTab('materi')" id="nav-materi" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2">
+                        <i class="fa-solid fa-book-open-reader text-brand-500"></i><span>Materi</span>
+                    </button>
+                    <button onclick="switchTab('game')" id="nav-game" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2">
+                        <i class="fa-solid fa-gamepad text-cyber-emerald"></i><span>Game</span>
+                    </button>
+                    <button onclick="switchTab('asesmen')" id="nav-asesmen" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2">
+                        <i class="fa-solid fa-square-check text-cyber-amber"></i><span>Asesmen</span>
+                    </button>
+                    <button onclick="switchTab('referensi')" id="nav-referensi" class="nav-btn px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 text-slate-300 hover:text-white hover:bg-slate-700/50 flex items-center gap-2">
+                        <i class="fa-solid fa-bookmark text-rose-400"></i><span>Referensi</span>
+                    </button>
+                </nav>
+
+                <!-- Student Profile Quick Badge & Sound Toggle -->
+                <div class="hidden sm:flex items-center space-x-3">
+                    <button onclick="toggleAudioMute()" id="sound-btn" title="Toggle Suara" class="p-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-colors">
+                        <i id="sound-icon" class="fa-solid fa-volume-high text-cyber-cyan"></i>
+                    </button>
+                    <div class="flex items-center space-x-3 bg-gradient-to-r from-slate-800 to-slate-800/80 px-3.5 py-2 rounded-2xl border border-slate-700/80 shadow-md">
+                        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-brand-500 to-cyber-cyan flex items-center justify-center text-white font-black text-xs shadow-inner">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+                        <div>
+                            <span class="text-[10px] text-slate-400 font-bold uppercase tracking-wider block">Siswa Aktif</span>
+                            <span id="header-student-name" class="text-xs font-bold text-white max-w-[110px] truncate block">Siswa Informatika</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="lg:hidden flex items-center space-x-2">
+                    <button onclick="toggleAudioMute()" class="p-2.5 rounded-xl bg-slate-800 text-slate-300 border border-slate-700">
+                        <i id="sound-icon-mobile" class="fa-solid fa-volume-high text-cyber-cyan text-sm"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="p-2.5 rounded-xl bg-slate-800 text-slate-300 border border-slate-700 hover:text-white focus:outline-none">
+                        <i id="mobile-menu-icon" class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu Dropdown -->
+        <div id="mobile-menu" class="hidden lg:hidden bg-slate-900/95 border-b border-slate-800 px-4 pt-3 pb-6 space-y-2 backdrop-blur-2xl">
+            <button onclick="switchTab('home')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-house w-5 text-cyber-cyan"></i>Home / Beranda</button>
+            <button onclick="switchTab('petunjuk')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-compass w-5 text-cyber-purple"></i>Petunjuk Penggunaan</button>
+            <button onclick="switchTab('tujuan')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-bullseye w-5 text-cyber-pink"></i>Tujuan Pembelajaran</button>
+            <button onclick="switchTab('materi')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-book-open-reader w-5 text-brand-500"></i>Materi Pembelajaran</button>
+            <button onclick="switchTab('game')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-gamepad w-5 text-cyber-emerald"></i>Game Edukasi</button>
+            <button onclick="switchTab('asesmen')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-square-check w-5 text-cyber-amber"></i>Asesmen Formatif</button>
+            <button onclick="switchTab('referensi')" class="mobile-nav-btn w-full text-left px-4 py-3 rounded-xl text-xs font-bold text-slate-200 hover:bg-slate-800 flex items-center gap-3"><i class="fa-solid fa-bookmark w-5 text-rose-400"></i>Referensi & Pustaka</button>
+        </div>
+    </header>
+
+    <!-- Main Content Body -->
+    <main class="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+
+        <!-- ================= TAB 1: HOME ================= -->
+        <section id="tab-home" class="tab-content space-y-8 animate-fadeIn">
+            <!-- Hero Cyber Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-slate-950 via-indigo-950 to-slate-900 border border-slate-800 p-6 sm:p-12 shadow-2xl">
+                <!-- Background Glowing Orbs -->
+                <div class="absolute -top-24 -right-24 w-96 h-96 bg-brand-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -bottom-24 -left-24 w-96 h-96 bg-cyber-cyan/15 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    <div class="lg:col-span-7 space-y-5">
+                        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand-500/20 border border-brand-400/30 text-brand-300 text-xs font-bold">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyber-cyan"></i>
+                            <span>Kurikulum Merdeka &bull; Fase D SMP/MTs</span>
+                        </div>
+                        <h2 class="font-display text-3xl sm:text-5xl font-extrabold tracking-tight text-white leading-tight">
+                            Eksplorasi Dunia <br>
+                            <span class="bg-gradient-to-r from-cyber-cyan via-brand-500 to-cyber-purple bg-clip-text text-transparent">
+                                Sistem Komputer
+                            </span>
+                        </h2>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed max-w-xl">
+                            Pelajari rahasia bagaimana hardware, software, dan brainware bekerja sama memproses data digital secara cepat dan akurat melalui media pembelajaran interaktif ini!
+                        </p>
+
+                        <!-- Student Name Input Card -->
+                        <div class="pt-3">
+                            <div class="p-2 sm:p-2.5 rounded-2xl bg-slate-900/80 border border-slate-700/80 backdrop-blur-md flex flex-col sm:flex-row items-center gap-2 max-w-lg shadow-inner">
+                                <div class="w-full sm:w-auto flex items-center pl-3 gap-2">
+                                    <i class="fa-solid fa-id-card text-cyber-cyan text-lg"></i>
+                                    <input type="text" id="student-name-input" placeholder="Masukkan Nama Lengkap Anda..." 
+                                           class="w-full px-2 py-2 bg-transparent text-white placeholder-slate-500 font-medium text-sm focus:outline-none">
+                                </div>
+                                <button onclick="saveStudentName()" class="w-full sm:w-auto px-5 py-2.5 bg-gradient-to-r from-brand-600 to-cyber-purple hover:from-brand-500 hover:to-cyber-purple text-white font-bold rounded-xl shadow-lg transition-all text-xs flex items-center justify-center gap-2 whitespace-nowrap active:scale-95">
+                                    <i class="fa-solid fa-floppy-disk"></i> Simpan Profil
+                                </button>
+                            </div>
+                            <p id="name-feedback" class="text-xs text-cyber-emerald mt-2 font-medium hidden">
+                                <i class="fa-solid fa-circle-check"></i> Profil siswa berhasil disimpan!
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Interactive Animated Graphic Card -->
+                    <div class="lg:col-span-5 flex justify-center">
+                        <div class="relative w-full max-w-sm">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-cyber-cyan via-brand-500 to-cyber-purple rounded-3xl blur-2xl opacity-40 animate-pulse-glow"></div>
+                            <div class="relative rounded-3xl bg-slate-900/90 border border-slate-700 p-6 space-y-4 shadow-2xl backdrop-blur-xl">
+                                <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                    <span class="text-xs font-bold text-slate-400 uppercase tracking-widest"><i class="fa-solid fa-microchip text-cyber-cyan mr-1"></i> Status Sistem</span>
+                                    <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+                                        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span> ONLINE
+                                    </span>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-3">
+                                    <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60 text-center">
+                                        <i class="fa-solid fa-hard-drive text-2xl text-cyber-cyan mb-1 animate-float"></i>
+                                        <div class="text-[10px] text-slate-400 font-bold">HARDWARE</div>
+                                        <div class="text-xs font-black text-white mt-0.5">Fisik Sistem</div>
+                                    </div>
+                                    <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60 text-center">
+                                        <i class="fa-solid fa-code text-2xl text-cyber-purple mb-1 animate-float"></i>
+                                        <div class="text-[10px] text-slate-400 font-bold">SOFTWARE</div>
+                                        <div class="text-xs font-black text-white mt-0.5">Instruksi Data</div>
+                                    </div>
+                                </div>
+
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700/60 flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="w-8 h-8 rounded-xl bg-cyber-pink/20 text-cyber-pink flex items-center justify-center font-bold text-sm">
+                                            <i class="fa-solid fa-user-astronaut"></i>
+                                        </div>
+                                        <div>
+                                            <div class="text-xs font-bold text-white">Brainware</div>
+                                            <div class="text-[10px] text-slate-400">Pengguna Komputer</div>
+                                        </div>
+                                    </div>
+                                    <i class="fa-solid fa-circle-check text-cyber-emerald text-base"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Navigation Feature Cards Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+                <!-- Card Petunjuk -->
+                <div onclick="switchTab('petunjuk')" class="group cursor-pointer p-6 rounded-3xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-cyber-purple/60 card-glow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/30 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-compass"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-lg mb-2 group-hover:text-cyber-purple transition-colors">Petunjuk Penggunaan</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Panduan alur belajar dan pemanfaatan fitur interaktif secara efisien.</p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs font-bold text-cyber-purple">
+                        <span>Buka Panduan</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Tujuan -->
+                <div onclick="switchTab('tujuan')" class="group cursor-pointer p-6 rounded-3xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-cyber-pink/60 card-glow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyber-pink/20 text-cyber-pink border border-cyber-pink/30 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-bullseye"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-lg mb-2 group-hover:text-cyber-pink transition-colors">Tujuan Pembelajaran</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Capaian Pembelajaran (CP) Elemen SK dan Profil Pelajar Pancasila.</p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs font-bold text-cyber-pink">
+                        <span>Lihat Capaian</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Materi -->
+                <div onclick="switchTab('materi')" class="group cursor-pointer p-6 rounded-3xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-brand-500/60 card-glow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-brand-500/20 text-brand-400 border border-brand-500/30 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-book-open-reader"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-lg mb-2 group-hover:text-brand-400 transition-colors">Materi Sistem Komputer</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Hardware, Software, Brainware, Siklus IPO+S, dan Antarmuka IMK.</p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs font-bold text-brand-400">
+                        <span>Mulai Pelajari</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Game -->
+                <div onclick="switchTab('game')" class="group cursor-pointer p-6 rounded-3xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-cyber-emerald/60 card-glow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/30 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-lg mb-2 group-hover:text-cyber-emerald transition-colors">Game Edukasi Sortir</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Uji ketangkasan mengelompokkan perangkat komputer secara interaktif.</p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs font-bold text-cyber-emerald">
+                        <span>Mainkan Game</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Asesmen -->
+                <div onclick="switchTab('asesmen')" class="group cursor-pointer p-6 rounded-3xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-cyber-amber/60 card-glow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-cyber-amber/20 text-cyber-amber border border-cyber-amber/30 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-square-check"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-lg mb-2 group-hover:text-cyber-amber transition-colors">Asesmen Formatif HOTS</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">10 Soal pemahaman Kurikulum Merdeka & cetak hasil evaluasi belajar.</p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs font-bold text-cyber-amber">
+                        <span>Kerjakan Quiz</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+
+                <!-- Card Referensi -->
+                <div onclick="switchTab('referensi')" class="group cursor-pointer p-6 rounded-3xl bg-slate-800/50 hover:bg-slate-800 border border-slate-700/60 hover:border-rose-500/60 card-glow-hover flex flex-col justify-between">
+                    <div>
+                        <div class="w-12 h-12 rounded-2xl bg-rose-500/20 text-rose-400 border border-rose-500/30 flex items-center justify-center text-xl font-bold mb-4 group-hover:scale-110 transition-transform">
+                            <i class="fa-solid fa-bookmark"></i>
+                        </div>
+                        <h3 class="font-display font-bold text-white text-lg mb-2 group-hover:text-rose-400 transition-colors">Referensi & Pustaka</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Daftar buku teks Kemendikbudristek dan sumber acuan resmi.</p>
+                    </div>
+                    <div class="mt-5 pt-3 border-t border-slate-700/50 flex items-center justify-between text-xs font-bold text-rose-400">
+                        <span>Lihat Sumber</span>
+                        <i class="fa-solid fa-arrow-right group-hover:translate-x-1 transition-transform"></i>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: PETUNJUK ================= -->
+        <section id="tab-petunjuk" class="tab-content hidden space-y-6">
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-cyber-purple/20 text-cyber-purple flex items-center justify-center text-xl font-bold border border-cyber-purple/30">
+                        <i class="fa-solid fa-compass"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-display font-extrabold text-xl text-white">Petunjuk Penggunaan Media</h2>
+                        <p class="text-xs text-slate-400">Langkah terstruktur untuk pengalaman belajar maksimal</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
+                    <!-- Step 1 -->
+                    <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-700/80 relative space-y-3">
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-cyber-cyan/20 text-cyber-cyan border border-cyber-cyan/30 font-extrabold text-[10px] uppercase">Langkah 01</span>
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-cyber-cyan font-bold text-lg">
+                            <i class="fa-solid fa-user-pen"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Isi Profil Siswa</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Masukkan nama lengkap Anda di halaman Beranda agar tercetak otomatis pada kartu laporan evaluasi akhir.</p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-700/80 relative space-y-3">
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-cyber-purple/20 text-cyber-purple border border-cyber-purple/30 font-extrabold text-[10px] uppercase">Langkah 02</span>
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-cyber-purple font-bold text-lg">
+                            <i class="fa-solid fa-book-open"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Pelajari Modul Materi</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Jelajahi 4 bab sub-materi (Hardware, Software, Brainware, & Interaksi) secara runut.</p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-700/80 relative space-y-3">
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/30 font-extrabold text-[10px] uppercase">Langkah 03</span>
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-cyber-emerald font-bold text-lg">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Latihan lewat EduGame</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Mainkan game sortir komponen untuk memperkuat ingatan klasifikasi perangkat komputer.</p>
+                    </div>
+
+                    <!-- Step 4 -->
+                    <div class="p-5 rounded-2xl bg-slate-900/80 border border-slate-700/80 relative space-y-3">
+                        <span class="inline-block px-2.5 py-1 rounded-lg bg-cyber-amber/20 text-cyber-amber border border-cyber-amber/30 font-extrabold text-[10px] uppercase">Langkah 04</span>
+                        <div class="w-10 h-10 rounded-xl bg-slate-800 flex items-center justify-center text-cyber-amber font-bold text-lg">
+                            <i class="fa-solid fa-award"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-sm">Evaluasi Asesmen</h3>
+                        <p class="text-xs text-slate-400 leading-relaxed">Selesaikan 10 soal quiz HOTS untuk mengukur tingkat ketuntasan belajar Anda.</p>
+                    </div>
+                </div>
+
+                <!-- Teacher Tip Callout -->
+                <div class="p-4 rounded-2xl bg-brand-500/10 border border-brand-500/30 flex items-center gap-3">
+                    <i class="fa-solid fa-lightbulb text-cyber-amber text-xl flex-shrink-0"></i>
+                    <p class="text-xs text-slate-300 leading-relaxed">
+                        <strong class="text-white">Tips Pembelajaran:</strong> Anda dapat mendengarkan efek suara interaktif saat menekan tombol dan dapat mengulang game atau asesmen kapan saja!
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 3: TUJUAN ================= -->
+        <section id="tab-tujuan" class="tab-content hidden space-y-6">
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-cyber-pink/20 text-cyber-pink flex items-center justify-center text-xl font-bold border border-cyber-pink/30">
+                        <i class="fa-solid fa-bullseye"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-display font-extrabold text-xl text-white">Capaian & Tujuan Pembelajaran</h2>
+                        <p class="text-xs text-slate-400">Elemen Sistem Komputer (SK) - Kurikulum Merdeka</p>
+                    </div>
+                </div>
+
+                <!-- CP Box -->
+                <div class="p-5 rounded-2xl bg-gradient-to-r from-slate-900 to-indigo-950 border border-brand-500/40 space-y-2">
+                    <div class="flex items-center space-x-2 text-cyber-cyan font-bold text-xs uppercase tracking-wider">
+                        <i class="fa-solid fa-award text-sm"></i>
+                        <span>Capaian Pembelajaran (CP) Elemen Sistem Komputer:</span>
+                    </div>
+                    <p class="text-xs sm:text-sm text-slate-200 leading-relaxed italic">
+                        "Pada akhir fase D, peserta didik mampu mendeskripsikan komponen, fungsi, dan cara kerja komputer yang membentuk sebuah sistem komputasi, serta menjelaskan proses dan interaksi antara perangkat keras, perangkat lunak, dan pengguna."
+                    </p>
+                </div>
+
+                <!-- Indikator TP -->
+                <div class="space-y-3">
+                    <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-cyber-cyan"></i> Indikator Ketercapaian Tujuan Pembelajaran (IKTP):
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-lg bg-cyber-cyan text-slate-950 font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">Mengidentifikasi & mengelompokkan perangkat keras (*Input, Process, Output, Storage*).</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-lg bg-cyber-purple text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">Membedakan Sistem Operasi (*Operating System*) dan Program Aplikasi (*Application Software*).</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-lg bg-cyber-pink text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">3</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">Menganalisis mekanisme interaksi manusia dan komputer (*GUI, CLI, Touch, Audio*).</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 flex items-start gap-3">
+                            <span class="w-6 h-6 rounded-lg bg-cyber-emerald text-slate-950 font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">4</span>
+                            <p class="text-xs text-slate-300 leading-relaxed">Menguraikan alur Siklus Pengolahan Data (*Input &rarr; Process &rarr; Output &rarr; Storage*).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profil Pelajar Pancasila -->
+                <div class="space-y-3 pt-2">
+                    <h3 class="font-bold text-white text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-hands-holding-circle text-cyber-purple"></i> Profil Pelajar Pancasila yang Dikembangkan:
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 text-center space-y-1">
+                            <i class="fa-solid fa-brain text-cyber-cyan text-2xl mb-1"></i>
+                            <h4 class="font-bold text-xs text-white">Bernalar Kritis</h4>
+                            <p class="text-[10px] text-slate-400">Menganalisis fungsi tiap komponen komputasi</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 text-center space-y-1">
+                            <i class="fa-solid fa-user-gear text-cyber-emerald text-2xl mb-1"></i>
+                            <h4 class="font-bold text-xs text-white">Mandiri</h4>
+                            <p class="text-[10px] text-slate-400">Mengukur pemahaman melalui latihan mandiri</p>
+                        </div>
+                        <div class="p-4 rounded-2xl bg-slate-900/80 border border-slate-700/80 text-center space-y-1">
+                            <i class="fa-solid fa-wand-magic-sparkles text-cyber-amber text-2xl mb-1"></i>
+                            <h4 class="font-bold text-xs text-white">Kreatif</h4>
+                            <p class="text-[10px] text-slate-400">Memecahkan masalah pengolahan data digital</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 4: MATERI ================= -->
+        <section id="tab-materi" class="tab-content hidden space-y-6">
+            <!-- Materi Sub Navigation Pills -->
+            <div class="flex space-x-2 border-b border-slate-800 pb-3 overflow-x-auto custom-scrollbar">
+                <button onclick="switchMateriSub('materi-1')" id="subnav-materi-1" class="subnav-btn px-4 py-2.5 rounded-2xl text-xs font-bold transition-all bg-gradient-to-r from-brand-600 to-cyber-purple text-white shadow-lg whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-cubes"></i> 1. Trilog Sistem Komputer
+                </button>
+                <button onclick="switchMateriSub('materi-2')" id="subnav-materi-2" class="subnav-btn px-4 py-2.5 rounded-2xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-hard-drive"></i> 2. Perangkat Keras (Hardware)
+                </button>
+                <button onclick="switchMateriSub('materi-3')" id="subnav-materi-3" class="subnav-btn px-4 py-2.5 rounded-2xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-code"></i> 3. Perangkat Lunak (Software)
+                </button>
+                <button onclick="switchMateriSub('materi-4')" id="subnav-materi-4" class="subnav-btn px-4 py-2.5 rounded-2xl text-xs font-bold transition-all bg-slate-800 text-slate-400 hover:text-white hover:bg-slate-700 whitespace-nowrap flex items-center gap-2">
+                    <i class="fa-solid fa-diagram-project"></i> 4. Siklus Data & Interaksi
+                </button>
+            </div>
+
+            <!-- SUB MATERI 1: Konsep Trilogi -->
+            <div id="materi-1" class="materi-sub-content space-y-6">
+                <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                        <div class="w-10 h-10 rounded-2xl bg-brand-500/20 text-brand-400 flex items-center justify-center text-xl font-bold border border-brand-500/30">
+                            <i class="fa-solid fa-cubes"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-display font-extrabold text-xl text-white">Apa itu Sistem Komputer?</h2>
+                            <p class="text-xs text-slate-400">3 Pilar Utama Komputasi Modern</p>
+                        </div>
+                    </div>
+
+                    <p class="text-xs sm:text-sm text-slate-300 leading-relaxed">
+                        <strong class="text-white">Sistem Komputer</strong> adalah jaringan elemen terintegrasi yang terdiri dari perangkat keras, perangkat lunak, dan manusia yang saling bekerja sama untuk menerima, mengolah, menyimpan, dan menyajikan informasi digital.
+                    </p>
+
+                    <!-- Interactive 3 Column Cards -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-5 pt-2">
+                        <!-- Hardware -->
+                        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-700 hover:border-cyber-cyan/50 transition-all card-glow-hover space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-cyber-cyan/20 text-cyber-cyan flex items-center justify-center text-xl font-bold border border-cyber-cyan/30">
+                                <i class="fa-solid fa-hard-drive"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-base">1. Hardware (Perangkat Keras)</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">Komponen fisik elektronik yang dapat disentuh secara langsung oleh tangan.</p>
+                            <div class="pt-2">
+                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-cyber-cyan/10 text-cyber-cyan border border-cyber-cyan/20">Contoh: CPU, Keyboard, Monitor</span>
+                            </div>
+                        </div>
+
+                        <!-- Software -->
+                        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-700 hover:border-cyber-purple/50 transition-all card-glow-hover space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-cyber-purple/20 text-cyber-purple flex items-center justify-center text-xl font-bold border border-cyber-purple/30">
+                                <i class="fa-solid fa-code"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-base">2. Software (Perangkat Lunak)</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">Kumpulan program & instruksi digital tak berwujud fisik yang mengontrol hardware.</p>
+                            <div class="pt-2">
+                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-cyber-purple/10 text-cyber-purple border border-cyber-purple/20">Contoh: Windows, MS Word, Chrome</span>
+                            </div>
+                        </div>
+
+                        <!-- Brainware -->
+                        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-700 hover:border-cyber-pink/50 transition-all card-glow-hover space-y-3">
+                            <div class="w-12 h-12 rounded-2xl bg-cyber-pink/20 text-cyber-pink flex items-center justify-center text-xl font-bold border border-cyber-pink/30">
+                                <i class="fa-solid fa-user-astronaut"></i>
+                            </div>
+                            <h3 class="font-bold text-white text-base">3. Brainware (Pengguna)</h3>
+                            <p class="text-xs text-slate-400 leading-relaxed">Manusia yang memberikan instruksi, mengoperasikan, dan mengelola komputer.</p>
+                            <div class="pt-2">
+                                <span class="text-[10px] font-bold px-2.5 py-1 rounded-lg bg-cyber-pink/10 text-cyber-pink border border-cyber-pink/20">Contoh: Programmer, User, Admin</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-4 rounded-2xl bg-gradient-to-r from-brand-600/20 to-cyber-purple/20 border border-brand-500/30 text-center text-xs text-slate-200">
+                        <i class="fa-solid fa-link text-cyber-cyan mr-1.5"></i> Ketiga pilar ini bersifat <strong>mutlak</strong>. Komputer canggih tanpa program atau pengguna tidak akan dapat beroperasi!
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB MATERI 2: Hardware -->
+            <div id="materi-2" class="materi-sub-content hidden space-y-6">
+                <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                        <div class="w-10 h-10 rounded-2xl bg-cyber-cyan/20 text-cyber-cyan flex items-center justify-center text-xl font-bold border border-cyber-cyan/30">
+                            <i class="fa-solid fa-hard-drive"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-display font-extrabold text-xl text-white">4 Kategori Perangkat Keras (Hardware)</h2>
+                            <p class="text-xs text-slate-400">Klasifikasi berdasarkan peranan fungsionalnya</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                        <!-- Input -->
+                        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-700 space-y-3">
+                            <div class="flex items-center space-x-3 text-cyber-cyan font-bold text-sm">
+                                <div class="w-8 h-8 rounded-xl bg-cyber-cyan/20 flex items-center justify-center text-cyber-cyan">
+                                    <i class="fa-solid fa-keyboard"></i>
+                                </div>
+                                <span>1. Perangkat Masukan (Input Device)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">Berfungsi mengintruksikan atau memasukkan mentah data luar ke dalam komputer.</p>
+                            <ul class="text-xs text-slate-300 space-y-1.5 pl-5 list-disc marker:text-cyber-cyan">
+                                <li><strong>Keyboard:</strong> Mengetik teks, simbol, dan angka.</li>
+                                <li><strong>Mouse / Touchpad:</strong> Menggerakkan kursor & memilih menu GUI.</li>
+                                <li><strong>Scanner & Webcam:</strong> Mengambil data citra fisik menjadi berkas digital.</li>
+                                <li><strong>Microphone:</strong> Menginput data gelombang suara audio.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Process -->
+                        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-700 space-y-3">
+                            <div class="flex items-center space-x-3 text-cyber-purple font-bold text-sm">
+                                <div class="w-8 h-8 rounded-xl bg-cyber-purple/20 flex items-center justify-center text-cyber-purple">
+                                    <i class="fa-solid fa-cpu"></i>
+                                </div>
+                                <span>2. Perangkat Pemrosesan (Process Device)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">Otak utama yang melakukan perhitungan matematis dan pemrosesan logika.</p>
+                            <ul class="text-xs text-slate-300 space-y-1.5 pl-5 list-disc marker:text-cyber-purple">
+                                <li><strong>CPU (Processor):</strong> Pusat kendali utama (*Brain of Computer*).</li>
+                                <li><strong>RAM (Memory):</strong> Penyimpanan cepat data sementara saat sistem aktif.</li>
+                                <li><strong>Motherboard:</strong> Papan sirkuit penghubung seluruh komponen internal.</li>
+                                <li><strong>GPU / VGA:</strong> Pemroses sinyal gambar visual & animasi grafis.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Output -->
+                        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-700 space-y-3">
+                            <div class="flex items-center space-x-3 text-cyber-emerald font-bold text-sm">
+                                <div class="w-8 h-8 rounded-xl bg-cyber-emerald/20 flex items-center justify-center text-cyber-emerald">
+                                    <i class="fa-solid fa-desktop"></i>
+                                </div>
+                                <span>3. Perangkat Keluaran (Output Device)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">Menampilkan atau mengeluarkan hasil pengolahan data komputer ke manusia.</p>
+                            <ul class="text-xs text-slate-300 space-y-1.5 pl-5 list-disc marker:text-cyber-emerald">
+                                <li><strong>Monitor:</strong> Menampilkan visual antarmuka pengguna.</li>
+                                <li><strong>Printer:</strong> Mencetak berkas digital ke media fisik kertas.</li>
+                                <li><strong>Speaker / Headphone:</strong> Mengeluarkan suara/audio.</li>
+                                <li><strong>Proyektor:</strong> Memancarkan tampilan visual ke layar lebar.</li>
+                            </ul>
+                        </div>
+
+                        <!-- Storage -->
+                        <div class="p-5 rounded-3xl bg-slate-900/90 border border-slate-700 space-y-3">
+                            <div class="flex items-center space-x-3 text-cyber-amber font-bold text-sm">
+                                <div class="w-8 h-8 rounded-xl bg-cyber-amber/20 flex items-center justify-center text-cyber-amber">
+                                    <i class="fa-solid fa-box-archive"></i>
+                                </div>
+                                <span>4. Perangkat Penyimpanan (Storage Device)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">Penyimpan data berkas secara permanen (*non-volatile*) walau listrik mati.</p>
+                            <ul class="text-xs text-slate-300 space-y-1.5 pl-5 list-disc marker:text-cyber-amber">
+                                <li><strong>SSD / HDD:</strong> Media penyimpanan utama sistem & file pengguna.</li>
+                                <li><strong>Flashdisk (USB Drive):</strong> Penyimpanan portabel berbasis flash memory.</li>
+                                <li><strong>MicroSD / SD Card:</strong> Kartu memori untuk kamera & smartphone.</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB MATERI 3: Software -->
+            <div id="materi-3" class="materi-sub-content hidden space-y-6">
+                <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                        <div class="w-10 h-10 rounded-2xl bg-cyber-purple/20 text-cyber-purple flex items-center justify-center text-xl font-bold border border-cyber-purple/30">
+                            <i class="fa-solid fa-code"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-display font-extrabold text-xl text-white">Klasifikasi Perangkat Lunak (Software)</h2>
+                            <p class="text-xs text-slate-400">Sistem Operasi vs Program Aplikasi</p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- OS Card -->
+                        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-700 space-y-4">
+                            <div class="flex items-center space-x-2 text-cyber-purple font-bold text-sm">
+                                <i class="fa-solid fa-gears text-lg"></i>
+                                <span>A. Sistem Operasi (Operating System / OS)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Software tingkat pertama yang bertindak sebagai fondasi pengelola hardware dan wadah eksekusi program aplikasi.
+                            </p>
+                            <div class="space-y-2">
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-between text-xs">
+                                    <span class="font-semibold text-white"><i class="fa-brands fa-windows text-blue-400 mr-2"></i>Microsoft Windows</span>
+                                    <span class="text-[10px] bg-blue-500/20 text-blue-300 px-2 py-0.5 rounded-full font-bold">PC / Laptop</span>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-between text-xs">
+                                    <span class="font-semibold text-white"><i class="fa-brands fa-apple text-slate-200 mr-2"></i>macOS & iOS</span>
+                                    <span class="text-[10px] bg-slate-500/20 text-slate-300 px-2 py-0.5 rounded-full font-bold">Apple Ecosystem</span>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-between text-xs">
+                                    <span class="font-semibold text-white"><i class="fa-brands fa-android text-emerald-400 mr-2"></i>Android OS</span>
+                                    <span class="text-[10px] bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full font-bold">Smartphone</span>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 flex items-center justify-between text-xs">
+                                    <span class="font-semibold text-white"><i class="fa-brands fa-linux text-amber-400 mr-2"></i>Linux (Ubuntu/Debian)</span>
+                                    <span class="text-[10px] bg-amber-500/20 text-amber-300 px-2 py-0.5 rounded-full font-bold">Open Source</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- App Card -->
+                        <div class="p-6 rounded-3xl bg-slate-900/90 border border-slate-700 space-y-4">
+                            <div class="flex items-center space-x-2 text-cyber-cyan font-bold text-sm">
+                                <i class="fa-solid fa-window-restore text-lg"></i>
+                                <span>B. Program Aplikasi (Application Software)</span>
+                            </div>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Software spesifik yang dibuat untuk mempermudah pekerjaan khusus manusia dalam kehidupan sehari-hari.
+                            </p>
+                            <div class="space-y-2">
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs space-y-1">
+                                    <span class="font-bold text-white block">Pengolah Kata (Word Processor):</span>
+                                    <span class="text-slate-400 text-[11px]">Microsoft Word, Google Docs, LibreOffice</span>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs space-y-1">
+                                    <span class="font-bold text-white block">Pengolah Angka (Spreadsheet):</span>
+                                    <span class="text-slate-400 text-[11px]">Microsoft Excel, Google Sheets</span>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs space-y-1">
+                                    <span class="font-bold text-white block">Perambah Web (Web Browser):</span>
+                                    <span class="text-slate-400 text-[11px]">Google Chrome, Mozilla Firefox, Microsoft Edge</span>
+                                </div>
+                                <div class="p-3 rounded-2xl bg-slate-800/80 border border-slate-700 text-xs space-y-1">
+                                    <span class="font-bold text-white block">Desain Grafis & Presentasi:</span>
+                                    <span class="text-slate-400 text-[11px]">Canva, Adobe Photoshop, MS PowerPoint</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SUB MATERI 4: Siklus Data & Interaksi -->
+            <div id="materi-4" class="materi-sub-content hidden space-y-6">
+                <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                    <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                        <div class="w-10 h-10 rounded-2xl bg-cyber-emerald/20 text-cyber-emerald flex items-center justify-center text-xl font-bold border border-cyber-emerald/30">
+                            <i class="fa-solid fa-diagram-project"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-display font-extrabold text-xl text-white">Siklus Data & Antarmuka Komputer</h2>
+                            <p class="text-xs text-slate-400">Bagaimana Informasi Berjalan & Diinteraksikan</p>
+                        </div>
+                    </div>
+
+                    <!-- Flow IPO+S Interactive Section -->
+                    <div class="p-6 rounded-3xl bg-slate-950 border border-slate-800 space-y-5">
+                        <h3 class="text-center font-display font-extrabold text-cyber-cyan text-sm uppercase tracking-wider">
+                            <i class="fa-solid fa-arrows-spin mr-1.5 animate-spin"></i> Diagram Siklus Pengolahan Data (IPO + S)
+                        </h3>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-4 gap-3">
+                            <div class="p-4 rounded-2xl bg-slate-900 border border-cyber-cyan/40 text-center space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-cyber-cyan/20 text-cyber-cyan flex items-center justify-center font-bold text-lg mx-auto">
+                                    <i class="fa-solid fa-right-to-bracket"></i>
+                                </div>
+                                <h4 class="font-extrabold text-white text-xs">1. INPUT</h4>
+                                <p class="text-[10px] text-slate-400">Pemasukan data mentah via keyboard/mouse</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-900 border border-cyber-purple/40 text-center space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-cyber-purple/20 text-cyber-purple flex items-center justify-center font-bold text-lg mx-auto">
+                                    <i class="fa-solid fa-gears"></i>
+                                </div>
+                                <h4 class="font-extrabold text-white text-xs">2. PROCESS</h4>
+                                <p class="text-[10px] text-slate-400">CPU mengolah dan menghitung logika</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-900 border border-cyber-emerald/40 text-center space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-cyber-emerald/20 text-cyber-emerald flex items-center justify-center font-bold text-lg mx-auto">
+                                    <i class="fa-solid fa-desktop"></i>
+                                </div>
+                                <h4 class="font-extrabold text-white text-xs">3. OUTPUT</h4>
+                                <p class="text-[10px] text-slate-400">Hasil disajikan pada layar / cetakan</p>
+                            </div>
+
+                            <div class="p-4 rounded-2xl bg-slate-900 border border-cyber-amber/40 text-center space-y-2">
+                                <div class="w-10 h-10 rounded-xl bg-cyber-amber/20 text-cyber-amber flex items-center justify-center font-bold text-lg mx-auto">
+                                    <i class="fa-solid fa-floppy-disk"></i>
+                                </div>
+                                <h4 class="font-extrabold text-white text-xs">4. STORAGE</h4>
+                                <p class="text-[10px] text-slate-400">Penyimpanan permanen di SSD / HDD</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Types of User Interaction -->
+                    <div class="space-y-3">
+                        <h3 class="font-bold text-white text-sm">Bentuk Interaksi Manusia dan Komputer (IMK):</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-700">
+                                <h4 class="font-bold text-xs text-cyber-cyan flex items-center gap-2 mb-1">
+                                    <i class="fa-solid fa-icons"></i> GUI (Graphical User Interface)
+                                </h4>
+                                <p class="text-xs text-slate-400">Interaksi visual paling umum berbasis ikon grafis, menu, tombol, dan kursor mouse.</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-700">
+                                <h4 class="font-bold text-xs text-cyber-purple flex items-center gap-2 mb-1">
+                                    <i class="fa-solid fa-terminal"></i> CLI (Command Line Interface)
+                                </h4>
+                                <p class="text-xs text-slate-400">Interaksi berbasis baris perintah teks instruksi (seperti Command Prompt atau Terminal).</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-700">
+                                <h4 class="font-bold text-xs text-cyber-pink flex items-center gap-2 mb-1">
+                                    <i class="fa-solid fa-microphone"></i> Audio / Perintah Suara
+                                </h4>
+                                <p class="text-xs text-slate-400">Perintah langsung suara menggunakan asisten kecerdasan buatan (Siri, Google Assistant).</p>
+                            </div>
+                            <div class="p-4 rounded-2xl bg-slate-900/90 border border-slate-700">
+                                <h4 class="font-bold text-xs text-cyber-emerald flex items-center gap-2 mb-1">
+                                    <i class="fa-solid fa-hand-pointer"></i> Sentuhan (Touchscreen)
+                                </h4>
+                                <p class="text-xs text-slate-400">Interaksi gestur jari langsung pada layar sentuh smartphone atau tablet.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 5: GAME ================= -->
+        <section id="tab-game" class="tab-content hidden space-y-6">
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                <!-- Header Game -->
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-slate-700 pb-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 rounded-2xl bg-cyber-emerald/20 text-cyber-emerald flex items-center justify-center text-xl font-bold border border-cyber-emerald/30">
+                            <i class="fa-solid fa-gamepad"></i>
+                        </div>
+                        <div>
+                            <h2 class="font-display font-extrabold text-xl text-white">Arcade Sortir Perangkat Komputer</h2>
+                            <p class="text-xs text-slate-400">Pilih kategori yang tepat untuk setiap item yang muncul!</p>
+                        </div>
+                    </div>
+
+                    <!-- Score Dashboard -->
+                    <div class="flex items-center space-x-4 bg-slate-900/90 px-5 py-2.5 rounded-2xl border border-slate-700">
+                        <div class="text-center">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Skor Game</span>
+                            <span id="game-score" class="text-xl font-black text-cyber-emerald">0</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-700"></div>
+                        <div class="text-center">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Combo</span>
+                            <span id="game-streak" class="text-xl font-black text-cyber-amber">0x</span>
+                        </div>
+                        <div class="h-8 w-px bg-slate-700"></div>
+                        <div class="text-center">
+                            <span class="text-[10px] text-slate-400 font-bold uppercase block">Sisa Item</span>
+                            <span id="game-remaining" class="text-xl font-black text-cyber-cyan">8</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Active Game Playing Area -->
+                <div id="game-active-area" class="space-y-6">
+                    <div class="p-8 sm:p-12 rounded-3xl bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 border border-slate-700 text-center space-y-5 relative overflow-hidden shadow-2xl">
+                        <div class="absolute -right-16 -top-16 w-64 h-64 bg-cyber-emerald/10 rounded-full blur-2xl"></div>
+
+                        <span class="inline-block text-xs font-black text-cyber-cyan bg-cyber-cyan/10 px-3.5 py-1 rounded-full border border-cyber-cyan/30 uppercase tracking-widest">
+                            Item Berkelanjutan #<span id="game-current-num">1</span>
+                        </span>
+
+                        <div class="py-2 space-y-3">
+                            <i id="game-item-icon" class="fa-solid fa-keyboard text-7xl text-cyber-amber block animate-float"></i>
+                            <h3 id="game-item-name" class="font-display text-3xl font-black text-white tracking-wide">Keyboard</h3>
+                            <p id="game-item-desc" class="text-xs text-slate-300 max-w-md mx-auto">Perangkat tombol untuk memasukkan data karakter teks dan simbol.</p>
+                        </div>
+
+                        <!-- Feedback Banner -->
+                        <div id="game-feedback" class="text-xs font-extrabold py-2.5 px-5 rounded-2xl hidden transition-all duration-300 max-w-md mx-auto"></div>
+                    </div>
+
+                    <!-- Category Choice Buttons -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        <button onclick="checkGameAnswer('input')" class="p-5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-cyber-cyan/40 hover:border-cyber-cyan text-white font-bold text-xs sm:text-sm flex flex-col items-center gap-2.5 transition-all card-glow-hover active:scale-95">
+                            <i class="fa-solid fa-keyboard text-2xl text-cyber-cyan"></i>
+                            <span>1. Perangkat Input</span>
+                        </button>
+                        <button onclick="checkGameAnswer('process')" class="p-5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-cyber-purple/40 hover:border-cyber-purple text-white font-bold text-xs sm:text-sm flex flex-col items-center gap-2.5 transition-all card-glow-hover active:scale-95">
+                            <i class="fa-solid fa-cpu text-2xl text-cyber-purple"></i>
+                            <span>2. Perangkat Proses</span>
+                        </button>
+                        <button onclick="checkGameAnswer('output')" class="p-5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-cyber-emerald/40 hover:border-cyber-emerald text-white font-bold text-xs sm:text-sm flex flex-col items-center gap-2.5 transition-all card-glow-hover active:scale-95">
+                            <i class="fa-solid fa-desktop text-2xl text-cyber-emerald"></i>
+                            <span>3. Perangkat Output</span>
+                        </button>
+                        <button onclick="checkGameAnswer('software')" class="p-5 rounded-2xl bg-slate-900 hover:bg-slate-800 border border-cyber-pink/40 hover:border-cyber-pink text-white font-bold text-xs sm:text-sm flex flex-col items-center gap-2.5 transition-all card-glow-hover active:scale-95">
+                            <i class="fa-solid fa-code text-2xl text-cyber-pink"></i>
+                            <span>4. Software / Aplikasi</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Game Finished Completion Screen -->
+                <div id="game-finished-area" class="hidden text-center p-10 rounded-3xl bg-slate-900 border border-cyber-emerald/50 space-y-5">
+                    <div class="w-20 h-20 rounded-full bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/40 flex items-center justify-center text-4xl mx-auto shadow-2xl">
+                        <i class="fa-solid fa-trophy"></i>
+                    </div>
+                    <h3 class="font-display text-3xl font-black text-white">Luar Biasa! Game Selesai!</h3>
+                    <p class="text-xs text-slate-300 max-w-md mx-auto">
+                        Anda telah mengklasifikasikan seluruh komponen komputer dengan sangat tepat!
+                    </p>
+                    <div class="p-4 rounded-2xl bg-slate-800/80 inline-block text-center border border-slate-700">
+                        <span class="text-[10px] text-slate-400 font-bold uppercase block">Skor Akhir Game Anda</span>
+                        <span id="game-final-score" class="text-3xl font-black text-cyber-emerald">100</span>
+                    </div>
+                    <div>
+                        <button onclick="resetGame()" class="px-8 py-3 bg-gradient-to-r from-cyber-emerald to-teal-500 hover:from-cyber-emerald hover:to-teal-600 text-slate-950 font-black text-xs rounded-2xl shadow-xl transition-all active:scale-95">
+                            <i class="fa-solid fa-rotate-right mr-2"></i> Mainkan Lagi
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 6: ASESMEN ================= -->
+        <section id="tab-asesmen" class="tab-content hidden space-y-6">
+            <!-- Asesmen Intro Card -->
+            <div id="quiz-intro" class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-cyber-amber/20 text-cyber-amber flex items-center justify-center text-xl font-bold border border-cyber-amber/30">
+                        <i class="fa-solid fa-square-check"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-display font-extrabold text-xl text-white">Asesmen Formatif Sistem Komputer</h2>
+                        <p class="text-xs text-slate-400">10 Soal Pilihan Ganda Berbasis HOTS Kurikulum Merdeka</p>
+                    </div>
+                </div>
+
+                <div class="p-5 rounded-2xl bg-slate-900 border border-slate-700 space-y-3 text-xs">
+                    <p class="font-bold text-white"><i class="fa-solid fa-circle-info text-cyber-amber mr-2"></i> Petunjuk Pengerjaan Asesmen:</p>
+                    <ul class="list-disc pl-5 space-y-1.5 text-slate-300">
+                        <li>Terdiri dari 10 butir soal pilihan ganda berbasis penalaran kritis (HOTS).</li>
+                        <li>Pilihlah satu opsi jawaban yang paling akurat untuk setiap nomor.</li>
+                        <li>Siswa dinyatakan <strong>TUNTAS</strong> apabila memperoleh nilai &ge; 75.</li>
+                        <li>Setelah selesai, Anda dapat melihat pembahasan lengkap dan mencetak Laporan Hasil.</li>
+                    </ul>
+                </div>
+
+                <div class="pt-2 flex justify-center">
+                    <button onclick="startQuiz()" class="px-10 py-3.5 bg-gradient-to-r from-cyber-amber via-amber-500 to-orange-500 hover:from-amber-500 hover:to-orange-600 text-slate-950 font-black text-sm rounded-2xl shadow-xl transition-all active:scale-95 flex items-center gap-2">
+                        <i class="fa-solid fa-play"></i> Mulai Kerjakan Asesmen
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Quiz Box Container -->
+            <div id="quiz-container" class="hidden p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                <!-- Question Progress Bar Header -->
+                <div class="flex items-center justify-between border-b border-slate-700 pb-4">
+                    <span id="quiz-progress-text" class="text-xs font-extrabold text-cyber-cyan uppercase tracking-wider">Soal 1 dari 10</span>
+                    <div class="w-40 bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-700">
+                        <div id="quiz-progress-bar" class="bg-gradient-to-r from-cyber-cyan to-brand-500 h-full w-[10%] transition-all duration-300"></div>
+                    </div>
+                </div>
+
+                <!-- Question Prompt -->
+                <div class="space-y-3">
+                    <h3 id="quiz-question" class="font-display text-base sm:text-lg font-bold text-white leading-relaxed">
+                        <!-- Injected JS Question -->
+                    </h3>
+                </div>
+
+                <!-- Multiple Choice Options Grid -->
+                <div id="quiz-options" class="space-y-3">
+                    <!-- Injected JS Option Buttons -->
+                </div>
+
+                <!-- Quiz Navigation Buttons -->
+                <div class="flex justify-between items-center pt-4 border-t border-slate-700">
+                    <button id="quiz-prev-btn" onclick="prevQuestion()" class="px-5 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-700 text-slate-300 font-bold text-xs transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                        <i class="fa-solid fa-chevron-left mr-2"></i> Sebelumnya
+                    </button>
+                    <button id="quiz-next-btn" onclick="nextQuestion()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-cyber-purple hover:from-brand-500 hover:to-cyber-purple text-white font-bold text-xs transition-all shadow-lg">
+                        Berikutnya <i class="fa-solid fa-chevron-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Asesmen Results Certificate / Report -->
+            <div id="quiz-result" class="hidden p-6 sm:p-10 rounded-3xl bg-slate-800/90 border border-slate-700 shadow-2xl space-y-8 print-full">
+                <div class="text-center space-y-3">
+                    <div id="result-badge-icon" class="w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto shadow-2xl bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/40">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                    </div>
+                    <h3 class="font-display text-2xl sm:text-3xl font-black text-white">Laporan Hasil Evaluasi Asesmen</h3>
+                    <p id="result-student-display" class="text-sm font-bold text-cyber-cyan">Siswa: -</p>
+                </div>
+
+                <!-- Scorecard Cards -->
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-center">
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-700">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Nilai Akhir</span>
+                        <div id="result-score" class="text-3xl font-black text-cyber-cyan mt-1">0</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-700">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Jawaban Benar</span>
+                        <div id="result-correct" class="text-3xl font-black text-cyber-emerald mt-1">0</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-700">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Jawaban Salah</span>
+                        <div id="result-wrong" class="text-3xl font-black text-rose-400 mt-1">0</div>
+                    </div>
+                    <div class="p-4 rounded-2xl bg-slate-900 border border-slate-700">
+                        <span class="text-[10px] font-bold text-slate-400 uppercase">Status Ketuntasan</span>
+                        <div id="result-status" class="text-xs font-black mt-2">TUNTAS</div>
+                    </div>
+                </div>
+
+                <!-- Detailed Answers Explanation Section -->
+                <div class="space-y-4 pt-2">
+                    <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list-check text-cyber-purple"></i> Pembahasan & Kunci Jawaban Lengkap:
+                    </h4>
+                    <div id="result-explanation-list" class="space-y-4 max-h-96 overflow-y-auto pr-2 custom-scrollbar">
+                        <!-- Injected Explanation Items -->
+                    </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="flex flex-col sm:flex-row justify-center gap-4 pt-4 border-t border-slate-700 no-print">
+                    <button onclick="startQuiz()" class="px-6 py-3 bg-slate-900 hover:bg-slate-700 text-slate-200 font-bold rounded-2xl text-xs transition-all border border-slate-700">
+                        <i class="fa-solid fa-rotate-right mr-2"></i> Ulangi Asesmen
+                    </button>
+                    <button onclick="window.print()" class="px-8 py-3 bg-gradient-to-r from-brand-600 to-cyber-purple hover:from-brand-500 hover:to-cyber-purple text-white font-bold rounded-2xl text-xs shadow-xl transition-all">
+                        <i class="fa-solid fa-print mr-2"></i> Cetak Laporan Hasil
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= TAB 7: REFERENSI ================= -->
+        <section id="tab-referensi" class="tab-content hidden space-y-6">
+            <div class="p-6 sm:p-8 rounded-3xl bg-slate-800/80 border border-slate-700 shadow-xl space-y-6">
+                <div class="flex items-center space-x-3 border-b border-slate-700 pb-4">
+                    <div class="w-10 h-10 rounded-2xl bg-rose-500/20 text-rose-400 flex items-center justify-center text-xl font-bold border border-rose-500/30">
+                        <i class="fa-solid fa-bookmark"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-display font-extrabold text-xl text-white">Referensi & Pustaka Rujukan</h2>
+                        <p class="text-xs text-slate-400">Acuan Resmi Kurikulum Merdeka Informatika SMP Kelas 7</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-700 flex items-start space-x-4">
+                        <i class="fa-solid fa-book-bookmark text-rose-400 text-xl mt-1"></i>
+                        <div class="text-xs text-slate-300 space-y-1">
+                            <strong class="font-bold text-white block text-sm">1. Buku Siswa Informatika SMP/MTs Kelas VII</strong>
+                            <p class="text-slate-400">Maret Usken Mareska, dkk. (2021). Pusat Kurikulum dan Perbukuan, Balitbangdikbud Kemendikbudristek RI. Jakarta.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-700 flex items-start space-x-4">
+                        <i class="fa-solid fa-book-open-reader text-rose-400 text-xl mt-1"></i>
+                        <div class="text-xs text-slate-300 space-y-1">
+                            <strong class="font-bold text-white block text-sm">2. Buku Panduan Guru Informatika SMP/MTs Kelas VII</strong>
+                            <p class="text-slate-400">Ivey H. A., dkk. (2021). Pusat Kurikulum dan Perbukuan Kemendikbudristek RI. Jakarta.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-700 flex items-start space-x-4">
+                        <i class="fa-solid fa-gavel text-rose-400 text-xl mt-1"></i>
+                        <div class="text-xs text-slate-300 space-y-1">
+                            <strong class="font-bold text-white block text-sm">3. Keputusan Kepala BSKAP No. 033/H/KR/2022</strong>
+                            <p class="text-slate-400">Capaian Pembelajaran pada PAUD, Dasmen, dan Menengah Pada Kurikulum Merdeka Kemendikbudristek.</p>
+                        </div>
+                    </div>
+
+                    <div class="p-5 rounded-2xl bg-slate-900/90 border border-slate-700 flex items-start space-x-4">
+                        <i class="fa-solid fa-globe text-rose-400 text-xl mt-1"></i>
+                        <div class="text-xs text-slate-300 space-y-1">
+                            <strong class="font-bold text-white block text-sm">4. Platform Merdeka Mengajar (PMM) Kemendikbudristek</strong>
+                            <p class="text-slate-400">Modul Ajar Informatika Elemen Sistem Komputer (SK) Fase D SMP Kelas 7.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 mt-auto text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>&copy; 2026 Media Pembelajaran Interaktif Informatika SMP - Fase D Kelas 7 (Kurikulum Merdeka)</p>
+            <p class="text-[10px] text-slate-600">Dikembangkan untuk mendukung pembelajaran Informatika interaktif yang menyenangkan.</p>
+        </div>
+    </footer>
+
+    <!-- Application JavaScript Logic -->
+    <script>
+        // Global State variables
+        let currentStudentName = "Siswa Informatika";
+        let isAudioMuted = false;
+
+        // Sound Synthesis using Web Audio API (No External Assets Required)
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        let audioCtx = null;
+
+        function playSound(type) {
+            if (isAudioMuted) return;
+            try {
+                if (!audioCtx) audioCtx = new AudioContext();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+
+                const now = audioCtx.currentTime;
+
+                if (type === 'click') {
+                    osc.frequency.setValueAtTime(400, now);
+                    osc.frequency.exponentialRampToValueAtTime(800, now + 0.05);
+                    gain.gain.setValueAtTime(0.1, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                    osc.start(now);
+                    osc.stop(now + 0.05);
+                } else if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, now); // C5
+                    osc.frequency.setValueAtTime(659.25, now + 0.08); // E5
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'wrong') {
+                    osc.type = 'sawtooth';
+                    osc.frequency.setValueAtTime(220, now);
+                    osc.frequency.setValueAtTime(160, now + 0.1);
+                    gain.gain.setValueAtTime(0.15, now);
+                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.25);
+                    osc.start(now);
+                    osc.stop(now + 0.25);
+                } else if (type === 'fanfare') {
+                    const notes = [523.25, 659.25, 783.99, 1046.50];
+                    notes.forEach((freq, idx) => {
+                        const noteOsc = audioCtx.createOscillator();
+                        const noteGain = audioCtx.createGain();
+                        noteOsc.connect(noteGain);
+                        noteGain.connect(audioCtx.destination);
+                        noteOsc.frequency.value = freq;
+                        noteGain.gain.setValueAtTime(0.15, now + idx * 0.1);
+                        noteGain.gain.exponentialRampToValueAtTime(0.01, now + idx * 0.1 + 0.2);
+                        noteOsc.start(now + idx * 0.1);
+                        noteOsc.stop(now + idx * 0.1 + 0.2);
+                    });
+                }
+            } catch (e) {
+                // Ignore audio errors
+            }
+        }
+
+        function toggleAudioMute() {
+            isAudioMuted = !isAudioMuted;
+            const icon = document.getElementById('sound-icon');
+            const iconMobile = document.getElementById('sound-icon-mobile');
+            if (isAudioMuted) {
+                if (icon) icon.className = "fa-solid fa-volume-xmark text-rose-400";
+                if (iconMobile) iconMobile.className = "fa-solid fa-volume-xmark text-rose-400 text-sm";
+            } else {
+                if (icon) icon.className = "fa-solid fa-volume-high text-cyber-cyan";
+                if (iconMobile) iconMobile.className = "fa-solid fa-volume-high text-cyber-cyan text-sm";
+                playSound('click');
+            }
+        }
+
+        // Tab Navigation Switcher
+        function switchTab(tabId) {
+            playSound('click');
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+
+            const target = document.getElementById('tab-' + tabId);
+            if (target) target.classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-slate-700/80', 'text-white', 'border', 'border-slate-600');
+            });
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) {
+                activeNav.classList.add('bg-slate-700/80', 'text-white', 'border', 'border-slate-600');
+            }
+
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
+                mobileMenu.classList.add('hidden');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            playSound('click');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('hidden');
+        }
+
+        // Sub-materi Tab Switcher
+        function switchMateriSub(materiId) {
+            playSound('click');
+            document.querySelectorAll('.materi-sub-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(materiId).classList.remove('hidden');
+
+            document.querySelectorAll('.subnav-btn').forEach(btn => {
+                btn.classList.remove('bg-gradient-to-r', 'from-brand-600', 'to-cyber-purple', 'text-white', 'shadow-lg');
+                btn.classList.add('bg-slate-800', 'text-slate-400');
+            });
+
+            const activeSub = document.getElementById('subnav-' + materiId);
+            if (activeSub) {
+                activeSub.classList.remove('bg-slate-800', 'text-slate-400');
+                activeSub.classList.add('bg-gradient-to-r', 'from-brand-600', 'to-cyber-purple', 'text-white', 'shadow-lg');
+            }
+        }
+
+        // Save Student Profile
+        function saveStudentName() {
+            const input = document.getElementById('student-name-input');
+            const val = input.value.trim();
+            if (val.length > 0) {
+                currentStudentName = val;
+                document.getElementById('header-student-name').innerText = currentStudentName;
+                playSound('correct');
+                const feedback = document.getElementById('name-feedback');
+                feedback.classList.remove('hidden');
+                setTimeout(() => feedback.classList.add('hidden'), 3000);
+            }
+        }
+
+        // Arcade Game Dataset
+        const gameItems = [
+            { id: 1, name: "Keyboard", desc: "Perangkat tombol untuk mengetik perintah dan teks.", icon: "fa-keyboard", category: "input" },
+            { id: 2, name: "Processor (CPU)", desc: "Otak utama pengolah logika dan data komputer.", icon: "fa-cpu", category: "process" },
+            { id: 3, name: "Monitor", desc: "Layar visual penampil antarmuka bagi pengguna.", icon: "fa-desktop", category: "output" },
+            { id: 4, name: "Microsoft Word", desc: "Program aplikasi pengolah kata dan dokumen.", icon: "fa-file-word", category: "software" },
+            { id: 5, name: "Mouse / Tetikus", desc: "Perangkat penunjuk untuk memilih menu visual.", icon: "fa-computer-mouse", category: "input" },
+            { id: 6, name: "Printer", desc: "Mencetak dokumen digital ke kertas fisik.", icon: "fa-print", category: "output" },
+            { id: 7, name: "Sistem Operasi Windows", desc: "Software dasar pengelola hardware & aplikasi.", icon: "fa-windows", category: "software" },
+            { id: 8, name: "Memori RAM", desc: "Penyimpanan data sementara saat komputer aktif.", icon: "fa-memory", category: "process" }
+        ];
+
+        let currentGameIndex = 0;
+        let gameScore = 0;
+        let gameStreak = 0;
+
+        function updateGameDisplay() {
+            if (currentGameIndex >= gameItems.length) {
+                // Game Finished
+                document.getElementById('game-active-area').classList.add('hidden');
+                document.getElementById('game-finished-area').classList.remove('hidden');
+                document.getElementById('game-final-score').innerText = gameScore;
+                playSound('fanfare');
+                triggerConfetti();
+                return;
+            }
+
+            const item = gameItems[currentGameIndex];
+            document.getElementById('game-current-num').innerText = currentGameIndex + 1;
+            document.getElementById('game-item-name').innerText = item.name;
+            document.getElementById('game-item-desc').innerText = item.desc;
+            
+            const iconEl = document.getElementById('game-item-icon');
+            iconEl.className = `fa-solid ${item.icon} text-7xl text-cyber-amber block animate-float`;
+
+            document.getElementById('game-score').innerText = gameScore;
+            document.getElementById('game-streak').innerText = gameStreak + 'x';
+            document.getElementById('game-remaining').innerText = gameItems.length - currentGameIndex;
+
+            const feedbackEl = document.getElementById('game-feedback');
+            feedbackEl.classList.add('hidden');
+        }
+
+        function checkGameAnswer(selectedCategory) {
+            if (currentGameIndex >= gameItems.length) return;
+
+            const currentItem = gameItems[currentGameIndex];
+            const feedbackEl = document.getElementById('game-feedback');
+
+            if (selectedCategory === currentItem.category) {
+                gameScore += 10 + (gameStreak * 2);
+                gameStreak++;
+                playSound('correct');
+                feedbackEl.className = "text-xs font-bold py-2.5 px-5 rounded-2xl bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/40 block";
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-check mr-1.5"></i> Tepat Sekali! ${currentItem.name} termasuk ${selectedCategory.toUpperCase()}.`;
+            } else {
+                gameStreak = 0;
+                playSound('wrong');
+                feedbackEl.className = "text-xs font-bold py-2.5 px-5 rounded-2xl bg-rose-500/20 text-rose-300 border border-rose-500/40 block";
+                feedbackEl.innerHTML = `<i class="fa-solid fa-circle-xmark mr-1.5"></i> Kurang Tepat! ${currentItem.name} seharusnya kategori ${currentItem.category.toUpperCase()}.`;
+            }
+
+            setTimeout(() => {
+                currentGameIndex++;
+                updateGameDisplay();
+            }, 1200);
+        }
+
+        function resetGame() {
+            playSound('click');
+            currentGameIndex = 0;
+            gameScore = 0;
+            gameStreak = 0;
+            document.getElementById('game-active-area').classList.remove('hidden');
+            document.getElementById('game-finished-area').classList.add('hidden');
+            updateGameDisplay();
+        }
+
+        // 10 HOTS Questions Dataset
+        const quizQuestions = [
+            {
+                question: "1. Ketika Anda menekan tombol huruf 'A' pada keyboard, huruf tersebut langsung muncul di layar monitor. Urutan alur kerja sistem komputer yang tepat adalah...",
+                options: [
+                    "Output &rarr; Process &rarr; Input",
+                    "Input &rarr; Process &rarr; Output",
+                    "Process &rarr; Storage &rarr; Input",
+                    "Storage &rarr; Output &rarr; Process"
+                ],
+                answer: 1,
+                explanation: "Alur kerja standar sistem komputer adalah IPO (Input lewat keyboard, diproses CPU, dan disajikan sebagai Output pada monitor)."
+            },
+            {
+                question: "2. Di laboratorium komputer, sebuah komputer dinyalakan tetapi layar monitornya gelap tanpa menampilkan gambar. Komponen mana yang kemungkinan besar bermasalah?",
+                options: [
+                    "Keyboard & Mouse",
+                    "VGA Card / Monitor",
+                    "Microphone & Speaker",
+                    "Harddisk / Flashdisk"
+                ],
+                answer: 1,
+                explanation: "VGA Card mengolah grafis dan monitor bertugas memancarkan sinyal visual."
+            },
+            {
+                question: "3. Pasangan di bawah ini yang menunjukkan perangkat masukan (Input) dan perangkat keluaran (Output) secara berurutan adalah...",
+                options: [
+                    "Scanner dan Printer",
+                    "Monitor dan Speaker",
+                    "Harddisk dan RAM",
+                    "CPU dan Motherboard"
+                ],
+                answer: 0,
+                explanation: "Scanner adalah perangkat masukan citra, sedangkan Printer adalah perangkat keluaran cetak."
+            },
+            {
+                question: "4. Mengapa RAM digolongkan sebagai memori sementara (volatile)?",
+                options: [
+                    "Karena harganya paling murah",
+                    "Karena data di dalam RAM hilang saat listrik/komputer dimatikan",
+                    "Karena ukurannya sangat kecil",
+                    "Karena RAM tidak dapat diganti"
+                ],
+                answer: 1,
+                explanation: "Sifat volatile berarti memori RAM hanya mampu menampung data saat mendapatkan daya listrik."
+            },
+            {
+                question: "5. Budi ingin menyusun laporan makalah tugas sekolah di laptopnya. Jenis perangkat lunak yang wajib ia buka adalah...",
+                options: [
+                    "Sistem Operasi Windows",
+                    "Program Aplikasi Pengolah Kata (seperti MS Word / Google Docs)",
+                    "Program Antivirus",
+                    "Perambah Web (Web Browser)"
+                ],
+                answer: 1,
+                explanation: "Software pengolah kata dirancang khusus untuk memproses format teks dokumen."
+            },
+            {
+                question: "6. Antarmuka komputer berbasis elemen visual seperti ikon grafis, tombol, dan window yang mudah diklik dikategorikan sebagai...",
+                options: [
+                    "CLI (Command Line Interface)",
+                    "GUI (Graphical User Interface)",
+                    "Audio Interface",
+                    "VGA Interface"
+                ],
+                answer: 1,
+                explanation: "GUI singkatan dari Graphical User Interface berbasis tombol visual."
+            },
+            {
+                question: "7. Android, iOS, Windows 11, dan Linux berada dalam kelompok...",
+                options: [
+                    "Perangkat Keras",
+                    "Sistem Operasi (Operating System)",
+                    "Aplikasi Spreadsheet",
+                    "Brainware"
+                ],
+                answer: 1,
+                explanation: "Nama-nama tersebut merupakan Sistem Operasi pengelola dasar sistem."
+            },
+            {
+                question: "8. Apa akibat utama jika komputer tidak dipasang Sistem Operasi (OS)?",
+                options: [
+                    "Komputer tetap bisa digunakan untuk internetan",
+                    "Hardware tidak terkoordinasi dan aplikasi tidak dapat dijalankan",
+                    "Komputer bekerja lebih cepat",
+                    "Keyboard otomatis terkunci"
+                ],
+                answer: 1,
+                explanation: "Tanpa Sistem Operasi, hardware tidak memiliki fondasi penerjemah instruksi aplikasi."
+            },
+            {
+                question: "9. Saat seorang siswa merekam suara presentasi menggunakan mikrofon, Mikrofon tersebut berfungsi sebagai...",
+                options: [
+                    "Perangkat Output Audio",
+                    "Perangkat Input Audio",
+                    "Perangkat Pemrosesan Utama",
+                    "Perangkat Penyimpanan Permanen"
+                ],
+                answer: 1,
+                explanation: "Mikrofon menangkap suara dari luar untuk dimasukkan (*input*) ke sistem."
+            },
+            {
+                question: "10. Di bawah ini yang merupakan media penyimpanan permanen (Storage Device) non-volatile adalah...",
+                options: [
+                    "RAM dan Processor",
+                    "SSD, Harddisk, dan Flashdisk",
+                    "Monitor dan Proyektor",
+                    "Mouse dan Keyboard"
+                ],
+                answer: 1,
+                explanation: "SSD, Harddisk, dan Flashdisk adalah media penyimpanan berkas permanen."
+            }
+        ];
+
+        let currentQuizIndex = 0;
+        let userAnswers = new Array(quizQuestions.length).fill(null);
+
+        function startQuiz() {
+            playSound('click');
+            currentQuizIndex = 0;
+            userAnswers = new Array(quizQuestions.length).fill(null);
+
+            document.getElementById('quiz-intro').classList.add('hidden');
+            document.getElementById('quiz-result').classList.add('hidden');
+            document.getElementById('quiz-container').classList.remove('hidden');
+
+            renderQuizQuestion();
+        }
+
+        function renderQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            
+            document.getElementById('quiz-progress-text').innerText = `Soal ${currentQuizIndex + 1} dari ${quizQuestions.length}`;
+            const pct = ((currentQuizIndex + 1) / quizQuestions.length) * 100;
+            document.getElementById('quiz-progress-bar').style.width = pct + '%';
+
+            document.getElementById('quiz-question').innerHTML = q.question;
+
+            const optionsContainer = document.getElementById('quiz-options');
+            optionsContainer.innerHTML = '';
+
+            q.options.forEach((optText, optIdx) => {
+                const btn = document.createElement('button');
+                btn.className = `w-full text-left p-4 rounded-2xl border text-xs sm:text-sm font-medium transition-all flex items-center justify-between ${
+                    userAnswers[currentQuizIndex] === optIdx
+                        ? 'bg-brand-500/20 border-brand-500 text-white font-bold shadow-md'
+                        : 'bg-slate-900 border-slate-700/80 text-slate-300 hover:bg-slate-800'
+                }`;
+                btn.onclick = () => selectQuizAnswer(optIdx);
+
+                btn.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <span class="w-7 h-7 rounded-xl border flex items-center justify-center text-xs font-bold ${
+                            userAnswers[currentQuizIndex] === optIdx 
+                                ? 'bg-brand-500 text-white border-brand-500' 
+                                : 'bg-slate-800 border-slate-600 text-slate-400'
+                        }">${String.fromCharCode(65 + optIdx)}</span>
+                        <span>${optText}</span>
+                    </div>
+                `;
+                optionsContainer.appendChild(btn);
+            });
+
+            document.getElementById('quiz-prev-btn').disabled = (currentQuizIndex === 0);
+
+            const nextBtn = document.getElementById('quiz-next-btn');
+            if (currentQuizIndex === quizQuestions.length - 1) {
+                nextBtn.innerHTML = `Selesai & Lihat Nilai <i class="fa-solid fa-check-double ml-2"></i>`;
+            } else {
+                nextBtn.innerHTML = `Berikutnya <i class="fa-solid fa-chevron-right ml-2"></i>`;
+            }
+        }
+
+        function selectQuizAnswer(optIndex) {
+            playSound('click');
+            userAnswers[currentQuizIndex] = optIndex;
+            renderQuizQuestion();
+        }
+
+        function prevQuestion() {
+            if (currentQuizIndex > 0) {
+                playSound('click');
+                currentQuizIndex--;
+                renderQuizQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuizIndex < quizQuestions.length - 1) {
+                playSound('click');
+                currentQuizIndex++;
+                renderQuizQuestion();
+            } else {
+                finishQuiz();
+            }
+        }
+
+        function finishQuiz() {
+            let correctCount = 0;
+            quizQuestions.forEach((q, idx) => {
+                if (userAnswers[idx] === q.answer) {
+                    correctCount++;
+                }
+            });
+
+            const score = Math.round((correctCount / quizQuestions.length) * 100);
+            const wrongCount = quizQuestions.length - correctCount;
+
+            document.getElementById('quiz-container').classList.add('hidden');
+            document.getElementById('quiz-result').classList.remove('hidden');
+
+            document.getElementById('result-student-display').innerText = "Siswa: " + currentStudentName;
+            document.getElementById('result-score').innerText = score;
+            document.getElementById('result-correct').innerText = correctCount;
+            document.getElementById('result-wrong').innerText = wrongCount;
+
+            const statusEl = document.getElementById('result-status');
+            const iconBadge = document.getElementById('result-badge-icon');
+
+            if (score >= 75) {
+                statusEl.innerText = "TUNTAS (LULUS)";
+                statusEl.className = "text-xs font-black text-cyber-emerald mt-2";
+                iconBadge.className = "w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto shadow-2xl bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/40";
+                iconBadge.innerHTML = `<i class="fa-solid fa-graduation-cap"></i>`;
+                playSound('fanfare');
+                triggerConfetti();
+            } else {
+                statusEl.innerText = "PERLU REMEDIAL";
+                statusEl.className = "text-xs font-black text-rose-400 mt-2";
+                iconBadge.className = "w-20 h-20 rounded-full flex items-center justify-center text-4xl mx-auto shadow-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40";
+                iconBadge.innerHTML = `<i class="fa-solid fa-book-open"></i>`;
+                playSound('wrong');
+            }
+
+            const explanationList = document.getElementById('result-explanation-list');
+            explanationList.innerHTML = '';
+
+            quizQuestions.forEach((q, idx) => {
+                const isCorrect = (userAnswers[idx] === q.answer);
+                const userChoiceText = userAnswers[idx] !== null ? q.options[userAnswers[idx]] : 'Tidak Dijawab';
+                const correctChoiceText = q.options[q.answer];
+
+                const card = document.createElement('div');
+                card.className = `p-4 rounded-2xl border text-xs space-y-2 ${
+                    isCorrect ? 'bg-cyber-emerald/10 border-cyber-emerald/30' : 'bg-rose-500/10 border-rose-500/30'
+                }`;
+
+                card.innerHTML = `
+                    <div class="flex items-start justify-between gap-2">
+                        <span class="font-bold text-white">Soal #${idx + 1}</span>
+                        <span class="px-2.5 py-0.5 rounded-full text-[10px] font-extrabold ${
+                            isCorrect ? 'bg-cyber-emerald/20 text-cyber-emerald border border-cyber-emerald/30' : 'bg-rose-500/20 text-rose-300 border border-rose-500/30'
+                        }">${isCorrect ? 'BENAR' : 'SALAH'}</span>
+                    </div>
+                    <p class="text-slate-200 font-medium">${q.question}</p>
+                    <div class="pt-1 space-y-1 text-[11px]">
+                        <p class="text-slate-400">Jawaban Anda: <strong class="${isCorrect ? 'text-cyber-emerald' : 'text-rose-400'}">${userChoiceText}</strong></p>
+                        ${!isCorrect ? `<p class="text-cyber-emerald">Kunci Jawaban: <strong>${correctChoiceText}</strong></p>` : ''}
+                        <p class="text-slate-300 italic mt-1 bg-slate-900/80 p-2.5 rounded-xl border border-slate-700/80"><i class="fa-solid fa-circle-info mr-1.5 text-cyber-cyan"></i><strong>Penjelasan:</strong> ${q.explanation}</p>
+                    </div>
+                `;
+                explanationList.appendChild(card);
+            });
+        }
+
+        function triggerConfetti() {
+            const canvas = document.getElementById('confetti-canvas');
+            if (!canvas) return;
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            const particles = [];
+            const colors = ['#06b6d4', '#10b981', '#a855f7', '#ec4899', '#f59e0b', '#6366f1'];
+
+            for (let i = 0; i < 120; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height - canvas.height,
+                    color: colors[Math.floor(Math.random() * colors.length)],
+                    size: Math.random() * 8 + 4,
+                    speedY: Math.random() * 4 + 2,
+                    speedX: Math.random() * 2 - 1,
+                    rotation: Math.random() * 360,
+                    rotationSpeed: Math.random() * 10 - 5
+                });
+            }
+
+            let animationFrame;
+            let timer = 0;
+
+            function animateConfetti() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                particles.forEach(p => {
+                    p.y += p.speedY;
+                    p.x += p.speedX;
+                    p.rotation += p.rotationSpeed;
+
+                    ctx.save();
+                    ctx.translate(p.x, p.y);
+                    ctx.rotate((p.rotation * Math.PI) / 180);
+                    ctx.fillStyle = p.color;
+                    ctx.fillRect(-p.size / 2, -p.size / 2, p.size, p.size);
+                    ctx.restore();
+                });
+
+                timer++;
+                if (timer < 180) {
+                    animationFrame = requestAnimationFrame(animateConfetti);
+                } else {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    cancelAnimationFrame(animationFrame);
+                }
+            }
+
+            animateConfetti();
+        }
+
+        // Initialization on window load
+        window.onload = function() {
+            updateGameDisplay();
+        };
+    </script>
+</body>
+</html>
